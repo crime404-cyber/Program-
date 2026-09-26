@@ -1,0 +1,44 @@
+import numpy as np
+
+X = np.array([1, 1, 0, 0, 1])
+y = np.array([1, 1, 0, 0, 0])
+
+hypotheses = {
+    "H1: complaint -> churn": lambda x: int(x == 1),
+    "H2: always stay": lambda x: 0,
+    "H3: always churn": lambda x: 1,
+}
+
+prior = {h: 1/len(hypotheses) for h in hypotheses}
+noise = 0.10
+
+def likelihood(h, X, y):
+    prob = 1.0
+    for x_i, y_i in zip(X, y):
+        pred = hypotheses[h](x_i)
+        prob *= (1-noise) if pred == y_i else noise
+    return prob
+
+likelihoods = {h: likelihood(h, X, y) for h in hypotheses}
+evidence = sum(prior[h] * likelihoods[h] for h in hypotheses)
+
+posterior = {
+    h: prior[h] * likelihoods[h] / evidence
+    for h in hypotheses
+}
+
+print("Posterior over hypotheses:")
+for h, p in posterior.items():
+    print(f"{h}: {p:.4f}")
+
+x_star = 1
+
+p_churn = sum(
+    posterior[h] * hypotheses[h](x_star)
+    for h in hypotheses
+)
+
+print("\nFor complaint=1:")
+print("P(Churn | data, x*) =", round(p_churn, 4))
+print("Bayes optimal prediction =",
+      "Churn" if p_churn >= 0.5 else "Stay")
