@@ -1,0 +1,45 @@
+weather_prior = {
+    "Sunny": 0.5,
+    "Overcast": 0.3,
+    "Rainy": 0.2
+}
+
+p_activity_yes_given_weather = {
+    "Sunny": 0.6,
+    "Overcast": 0.8,
+    "Rainy": 0.4
+}
+
+print("Enter Weather (Sunny/Overcast/Rainy):")
+weather = input().strip()
+
+print("Enter Activity (Yes/No):")
+activity = input().strip()
+
+p_activity_yes = sum(
+    weather_prior[w] * p_activity_yes_given_weather[w]
+    for w in weather_prior
+)
+
+posterior_rainy = (
+    weather_prior["Rainy"]
+    * p_activity_yes_given_weather["Rainy"]
+    / p_activity_yes
+)
+
+print("P(Activity=Yes) =", round(p_activity_yes, 4))
+print("P(Rainy | Activity=Yes) =", round(posterior_rainy, 4))
+print("Posterior percentage =", round(posterior_rainy * 100, 2), "%")
+
+Input:
+
+Enter Weather (Sunny/Overcast/Rainy):
+Rainy
+Enter Activity (Yes/No):
+Yes
+
+Output:
+
+P(Activity=Yes) = 0.62
+P(Rainy | Activity=Yes) = 0.129
+Posterior percentage = 12.9 %
