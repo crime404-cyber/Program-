@@ -1,0 +1,34 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, classification_report
+
+df = pd.read_csv("customer_churn_dataset.csv")
+
+features = ["UsageHours", "Complaints", "AccountAgeMonths", "PromoUser"]
+X = df[features]
+y = df["Churn"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.30, random_state=42, stratify=y
+)
+
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+pred = model.predict(X_test)
+
+print("Accuracy:", round(accuracy_score(y_test, pred), 3))
+print("\nClassification report:")
+print(classification_report(y_test, pred, zero_division=0))
+
+new_customer = pd.DataFrame([{
+    "UsageHours": 82,
+    "Complaints": 3,
+    "AccountAgeMonths": 10,
+    "PromoUser": 0
+}])
+
+print("New customer prediction:",
+      "Churn" if model.predict(new_customer)[0] == 1 else "Stay")
+print("Probabilities [Stay, Churn]:", model.predict_proba(new_customer)[0])
