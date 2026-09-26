@@ -1,0 +1,29 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def rbf(x, center, sigma):
+    x = np.asarray(x, dtype=float)
+    center = np.asarray(center, dtype=float)
+
+    distance_squared = np.sum((x - center) ** 2)
+
+    return np.exp(
+        -distance_squared / (2 * sigma ** 2)
+    )
+
+center = float(input("Enter RBF centre (for example 0): "))
+sigma = float(input("Enter RBF sigma (for example 1): "))
+
+x_values = np.linspace(-4, 4, 200)
+activations = [
+    rbf([x], [center], sigma)
+    for x in x_values
+]
+
+plt.figure(figsize=(8, 4))
+plt.plot(x_values, activations)
+plt.xlabel("Input x")
+plt.ylabel("RBF Activation")
+plt.title("Gaussian Radial Basis Function")
+plt.grid(True)
+plt.show()
