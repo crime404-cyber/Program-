@@ -1,0 +1,35 @@
+import pandas as pd
+
+df = pd.read_csv("customer_churn_dataset.csv")
+
+def h1(row):
+    return row["ComplaintFlag"] == 1
+
+def h2(row):
+    return row["HighUsage"] == 1 and row["ComplaintFlag"] == 1
+
+def h3(row):
+    return row["HighUsage"] == 1
+
+hypotheses = {
+    "H1: complaints -> churn": h1,
+    "H2: high usage AND complaints -> churn": h2,
+    "H3: high usage -> churn": h3
+}
+
+for name, rule in hypotheses.items():
+    predictions = df.apply(rule, axis=1).astype(int)
+    consistent = (predictions == df["Churn"]).all()
+    print(name, "=>", "CONSISTENT" if consistent else "ELIMINATE")
+
+test_customer = {
+    "HighUsage": 1,
+    "ComplaintFlag": 0,
+    "Churn": 0
+}
+
+print("\nNew customer: High usage + no complaints -> Stay")
+
+for name, rule in hypotheses.items():
+    prediction = int(rule(pd.Series(test_customer)))
+    print(name, "predicts", "Churn" if prediction else "Stay")
