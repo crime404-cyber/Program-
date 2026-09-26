@@ -46,3 +46,12 @@ prediction, weights = locally_weighted_regression(
 
 print(f"Predicted y value: {prediction:.2f}")
 print("Weights:", np.round(weights, 3))
+
+plt.figure(figsize=(8, 4))
+plt.stem(x_train, weights)
+plt.axvline(query_x, linestyle="--", label="Query point")
+plt.xlabel("Training x")
+plt.ylabel("Weight")
+plt.title("Locally Weighted Regression – Influence of Nearby Points")
+plt.legend()
+plt.show()
