@@ -1,0 +1,21 @@
+import pandas as pd
+
+df = pd.read_csv("customer_churn_dataset.csv")
+
+n = len(df)
+churned = df["Churn"].sum()
+
+theta_mle = churned / n
+
+print("Total customers:", n)
+print("Churned customers:", int(churned))
+print("MLE of P(Churn):", round(theta_mle, 4))
+print("MLE percentage:", round(theta_mle * 100, 2), "%")
+
+def bernoulli_likelihood(theta, successes, failures):
+    return theta**successes * (1-theta)**failures
+
+failures = n - churned
+for theta in [0.10, 0.20, 0.25, 0.30, 0.40]:
+    L = bernoulli_likelihood(theta, int(churned), int(failures))
+    print(f"theta={theta:.2f}, likelihood={L:.6e}")
