@@ -1,0 +1,12 @@
+models = {
+    "Model A - Simple": {"model_cost": 2, "data_cost": 8},
+    "Model B - Complex": {"model_cost": 7, "data_cost": 4},
+}
+
+for name, m in models.items():
+    m["total"] = m["model_cost"] + m["data_cost"]
+    print(name, "=> total description length =", m["total"])
+
+best = min(models, key=lambda x: models[x]["total"])
+print("\nMDL selects:", best)
+print("Reason: it has the shortest total description.")
