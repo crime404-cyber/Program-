@@ -1,0 +1,21 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+customers = pd.DataFrame({
+    "Age": [22, 25, 28, 31, 35, 38, 42, 45, 48, 52, 55, 58],
+    "Income": [25, 30, 32, 38, 45, 48, 55, 60, 65, 72, 78, 85],
+    "Purchase": [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+})
+
+print("Customer Dataset:")
+print(customers)
+
+X = customers[["Age", "Income"]]
+y = customers["Purchase"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42, stratify=y
+)
+print("\nTraining samples:", len(X_train))
+print("Testing samples:", len(X_test))
+
