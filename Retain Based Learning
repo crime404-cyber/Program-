@@ -1,0 +1,14 @@
+case_base = []
+
+query = input("Enter the problem: ")
+new_solution = input("Enter the final revised solution for this problem: ")
+
+case_base.append({
+    "problem": query,
+    "solution": new_solution
+})
+
+print("\nUpdated case base:")
+
+for case in case_base:
+    print(case)
