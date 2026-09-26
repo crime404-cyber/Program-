@@ -1,0 +1,49 @@
+case_base = [
+    {
+        "problem": "customer forgot password",
+        "solution": "send password reset instructions"
+    },
+    {
+        "problem": "customer cannot login",
+        "solution": "verify account and reset password"
+    },
+    {
+        "problem": "customer payment failed",
+        "solution": "check payment details and retry transaction"
+    },
+    {
+        "problem": "customer wants refund",
+        "solution": "check refund policy and initiate refund"
+    }
+]
+
+print("Stored cases:")
+for case in case_base:
+    print(case)
+
+
+def similarity(query, old_problem):
+    q_words = set(query.lower().split())
+    p_words = set(old_problem.lower().split())
+
+    if not q_words or not p_words:
+        return 0
+
+    return len(q_words & p_words) / len(q_words | p_words)
+
+
+def retrieve_case(query, cases):
+    scored = [
+        (similarity(query, case["problem"]), case)
+        for case in cases
+    ]
+    return max(scored, key=lambda x: x[0])
+
+
+query = input("Enter a new customer problem: ")
+
+score, best_case = retrieve_case(query, case_base)
+
+print("\nRetrieved case:", best_case)
+print("Similarity score:", round(score, 2))
+print("Proposed solution:", best_case["solution"])
